@@ -28,7 +28,7 @@ import { EventsGateway } from './events.gateway';
         UsersModule,
         TypeOrmModule.forRoot({
             type: 'sqlite',
-            database: 'code-playgrounds.sqlite3',
+            database: 'code-playgrounds.db',
             synchronize: true,  
             entities: [
                 User,
