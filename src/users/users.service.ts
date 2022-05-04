@@ -1,10 +1,14 @@
-import { Injectable, ConflictException  } from '@nestjs/common';
+import { 
+	Injectable, 
+	ConflictException, 
+	BadRequestException 
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as crypto from 'crypto';
 
 import { User } from './user.entity';
-import { SignUpDto } from './users.dto';
+import { SignUpDto, ChangePasswordDto } from './users.dto';
 
 
 @Injectable()
@@ -22,12 +26,12 @@ export class UsersService {
 			.digest('hex')
 	}
 
-  	async findOne(userId: User['userId']): Promise<User | undefined> {
-   		return this.userRepository.findOne({ where: { userId } });
+  	async findOne(username: User['username']): Promise<User | undefined> {
+   		return this.userRepository.findOne({ where: { username } });
   	}
 
-  	async signup(signUpDto: Omit<SignUpDto, 'userNo' | 'passwordConfirm'>): Promise<void> {
-  		if(await this.findOne(signUpDto.userId)) {
+  	async signup(signUpDto: SignUpDto): Promise<void> {
+  		if(await this.findOne(signUpDto.username)) {
   			throw new ConflictException();
   		}
 
@@ -39,16 +43,21 @@ export class UsersService {
   		return;
   	}
 
-  	async changeProfile(signUpDto: Omit<SignUpDto, 'passwordConfirm'>): Promise<void> {
-  		const user = await this.findOne(signUpDto.userId);
-  		if(user && user.userNo !== signUpDto.userNo) {
-  			throw new ConflictException();
-  		}
-
-  		await this.userRepository.save({
-  			...signUpDto,
-  			password: this.hashPassword(signUpDto.password)
-  		});
+  	async changePassword(username: User['username'], changePasswordDto: ChangePasswordDto): Promise<void> {
+  		const user = await this.findOne(username);
+ 
+ 		if (user && user.password === this.hashPassword(changePasswordDto.password)) {
+ 			await this.userRepository.update(
+ 				{ 
+ 					username: username
+ 				},
+ 				{
+  					password: this.hashPassword(changePasswordDto.newPassword)
+  				}
+  			);
+    	} else {
+    		throw new BadRequestException();
+    	}
 
   		return;
   	}

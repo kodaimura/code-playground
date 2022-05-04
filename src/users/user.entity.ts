@@ -14,13 +14,10 @@ export class User {
 	userNo: number;
 
 	@Column({ unique: true, length: 30 })
-	userId: string;
+	username: string;
 
 	@Column()
 	password: string;
-
-	@Column({ length: 30 })
-	userName: string;
 
 	@CreateDateColumn({ precision: 0 })
 	createAt: string;
