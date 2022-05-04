@@ -13,17 +13,17 @@ import {getProfile} from '../../utils/common-requests';
 
 const MyPage = () => {
 	const [openFileNo, setOpenFileNo] = useState(NaN);
-	const [userName, setUserName] = useState("");
+	const [username, setUsername] = useState("");
 	
 	useEffect(() => {
     	getProfile()
     	.then((data) => {
-    		if (data && data.userName) setUserName(data.userName);
+    		if (data && data.username) setUsername(data.username);
   	})}, []);
 
 	return (
 		<>
-		<Header rightContent={<UserIconMenu userName={userName}/>} />
+		<Header rightContent={<UserIconMenu username={username}/>} />
 		<Grid container>
         <Grid item xs={2.5} style={{ backgroundColor: "#CCC" }}>
 			<EditorSideBar setOpenFileNo={setOpenFileNo}/>

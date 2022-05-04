@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 
-import {signup} from '../../utils/common-requests';
+import {changePassword} from '../../utils/common-requests';
 
 
 const ErrorMessage = styled("div") ({
@@ -16,10 +16,10 @@ const TextInput = styled(TextField) ({
 })
 
 
-const SignupForm = () => {
-	const [username, setUsername] = useState("");
+const PasswordChangeForm = () => {
 	const [password, setPassword] = useState("");
-	const [passwordConfirm, setPasswordConfig] = useState("");
+	const [newPassword, setNewPassword] = useState("");
+	const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
 	const [errorMsg, setErrorMsg] = useState("");
 
 	return (
@@ -33,36 +33,39 @@ const SignupForm = () => {
 		>
 		<Grid item>
 			<em>
-			Create a new account.
+			Change password.
 			</em>
 		</Grid>
 		<Grid item>
-		<TextInput 
-			label="Username"
-			required 
-			fullWidth 
-			variant="filled"
-			onChange={(e) => setUsername(e.target.value)}
-		/>
 		</Grid>
 		<Grid item>
 		<TextInput 
-			label="Password" 
+			label="Old Password" 
 			required 
-			fullWidth 
-			type="password" 
+			fullWidth
+			type="password"   
 			variant="filled"
 			onChange={(e) => setPassword(e.target.value)}
 		/>
 		</Grid>
 		<Grid item>
 		<TextInput 
-			label="Confirmation Password" 
+			label="New Password" 
+			required 
+			fullWidth 
+			type="password" 
+			variant="filled"
+			onChange={(e) => setNewPassword(e.target.value)}
+		/>
+		</Grid>
+		<Grid item>
+		<TextInput 
+			label="Confirmation New Password" 
 			required 
 			fullWidth  
 			type="password" 
 			variant="filled"
-			onChange={(e) => setPasswordConfig(e.target.value)}
+			onChange={(e) => setNewPasswordConfirm(e.target.value)}
 		/>
 		</Grid>
 		<Grid item>
@@ -70,8 +73,8 @@ const SignupForm = () => {
 			size="large" 
 			variant="contained" 
 			color="primary" 
-			onClick={() => signup(username, password, passwordConfirm, setErrorMsg)}
-		>Signup</ Button>
+			onClick={() => changePassword(password, newPassword, newPasswordConfirm, setErrorMsg)}
+		>Change</ Button>
 		</Grid>
 		<Grid item>
 		<ErrorMessage>
@@ -82,4 +85,4 @@ const SignupForm = () => {
 		)
 }
 
-export default SignupForm;
+export default PasswordChangeForm;

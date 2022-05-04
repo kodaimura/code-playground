@@ -8,7 +8,7 @@ import {
 import LoginPage from './components/pages/LoginPage';
 import SignupPage from './components/pages/SignupPage';
 import MyPage from './components/pages/MyPage';
-import ChangeProfilePage from './components/pages/ChangeProfilePage';
+import PasswordChangePage from './components/pages/PasswordChangePage';
 import GuestPage from './components/pages/GuestPage';
 
 import {checkAuth} from './utils/common-requests';
@@ -30,7 +30,7 @@ const App = () => {
         <Route path="/" element={auth? <MyPage /> : <LoginPage />} />
         <Route path="/guest" element={<GuestPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/changeprofile" element={<ChangeProfilePage />} />　
+        <Route path="/passwordchange" element={<PasswordChangePage />} />　
         <Route element={<LoginPage />} />　　
       </Routes>
     </BrowserRouter>

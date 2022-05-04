@@ -1,7 +1,10 @@
+import {useState} from 'react';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
+
+import {login} from '../../utils/common-requests';
 
 
 const ErrorMessage = styled("div") ({
@@ -12,14 +15,10 @@ const TextInput = styled(TextField) ({
 	width: 300
 })
 
-const LoginForm = (props: {
-	description?: string,
-	onChange1: (event: React.ChangeEvent<HTMLInputElement>) => void,
-	onChange2: (event: React.ChangeEvent<HTMLInputElement>) => void,
-	onClick: (event: React.MouseEvent<HTMLButtonElement>) => void,
-	buttonText?: string,
-	errorMessage?: string
-}) => {
+const LoginForm = () => {
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+	const [errorMsg, setErrorMsg] = useState("");
 
 	return (
 		<>
@@ -33,15 +32,15 @@ const LoginForm = (props: {
 		>
 		<Grid item>
 			<em>
-			{props.description}
+			Login to Code Playground.
 			</em>
 		</Grid>
 		<Grid item>
 		<TextInput 
 			required 
-			label="ID" 
+			label="Username" 
 			variant="filled"
-			onChange={props.onChange1}
+			onChange={(e) => setUsername(e.target.value)}
 		/>
 		</Grid>
 		<Grid item>
@@ -50,7 +49,7 @@ const LoginForm = (props: {
 			label="Password" 
 			type="password" 
 			variant="filled"
-			onChange={props.onChange2}
+			onChange={(e) => setPassword(e.target.value)} 
 		/>
 		</Grid>
 		<Grid item>
@@ -58,12 +57,12 @@ const LoginForm = (props: {
 			size="large"
 			variant="contained" 
 			color="primary" 
-			onClick={props.onClick} 
-		>{props.buttonText}</ Button>
+			onClick={() => login(username, password, setErrorMsg)}
+		>Login</ Button>
 		</Grid>
 		<Grid item>
 		<ErrorMessage>
-		{props.errorMessage? props.errorMessage : ""}
+		{errorMsg}
 		</ErrorMessage>
 		</Grid>
 		</Grid>

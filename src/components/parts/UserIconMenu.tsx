@@ -19,7 +19,7 @@ import {logout} from '../../utils/common-requests';
 
 
 const UserIconMenu = (props: {
-	userName: string
+	username: string
 }) => {
  	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   	const open = Boolean(anchorEl);
@@ -39,7 +39,7 @@ const UserIconMenu = (props: {
   		<Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center'}}>
         <Tooltip title="Account settings">
         	<IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
-            <Avatar sx={{ width: 36, height: 36 }}>{props.userName.charAt(0)}</Avatar>
+            <Avatar sx={{ width: 36, height: 36 }}>{props.username.charAt(0)}</Avatar>
           	</IconButton>
         </Tooltip>
       	</Box>
@@ -79,12 +79,12 @@ const UserIconMenu = (props: {
        		anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       	>
       	<MenuItem>
-        	<ListItemText>{props.userName}</ListItemText>
+        	<ListItemText>{props.username}</ListItemText>
         	<Typography variant="body2" color="text.secondary">
         	</Typography>
         </MenuItem>
-        <MenuItem onClick={() => navigate("/changeprofile") }>
-        	<Avatar /> Change Profile
+        <MenuItem onClick={() => navigate("/passwordchange") }>
+        	<Avatar /> Change Password
         </MenuItem>
         <Divider />
         <MenuItem onClick={() => navigate("/") }>
