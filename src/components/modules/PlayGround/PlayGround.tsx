@@ -17,7 +17,7 @@ import {
 } from '../../modules';
 import { LeftAlign, RightAlign } from '../../shared';
 
-import { defaultCodes, apiurl } from '../../../utils/constants';
+import { defaultCodes } from '../../../utils/constants';
 
 
 /*
