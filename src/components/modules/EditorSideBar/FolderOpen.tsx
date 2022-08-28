@@ -10,7 +10,7 @@ import FolderMenu from './FolderMenu';
 import FileList from './FileList';
 import FolderList from './FolderList';
 import {Folder, FileInfo} from '../../../types/types';
-import {getFolders, getFilesInfo} from '../../../utils/requests';
+import {getFolders, getFilesInfo} from '../../../apis/requests';
 
 
 /*

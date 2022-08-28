@@ -8,7 +8,7 @@ import FolderOpen from './FolderOpen';
 MyPage用のSideBar
 */
 
-const EditorSideBar = (props: {
+export const EditorSideBar = (props: {
 	setOpenFileNo: (arg: number) => void,
 }) => {
 
@@ -42,5 +42,3 @@ const EditorSideBar = (props: {
 		</>
 	)
 }
-
-export default EditorSideBar;

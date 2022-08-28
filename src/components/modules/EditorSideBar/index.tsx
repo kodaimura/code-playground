@@ -1,3 +1,1 @@
-import EditorSideBar from './EditorSideBar';
-
-export default EditorSideBar;
+export{ EditorSideBar} from './EditorSideBar';

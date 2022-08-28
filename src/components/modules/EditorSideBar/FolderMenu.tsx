@@ -6,10 +6,10 @@ import Divider from '@mui/material/Divider';
 
 import FolderNameForm from './FolderNameForm';
 import FileNameForm from './FileNameForm';
-import DeleteDialog from '../../parts/DeleteDialog';
+import {DeleteDialog} from '../../shared';
 
 import {Folder, FileInfo} from '../../../types/types';
-import {deleteFolder} from '../../../utils/requests';
+import {deleteFolder} from '../../../apis/requests';
 
 
 /*

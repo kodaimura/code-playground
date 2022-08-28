@@ -6,9 +6,9 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 import InputAdornment from '@mui/material/InputAdornment';
 
-import LangAndVersionPulldown from '../LangAndVersionPulldown';
+import {LangAndVersionPulldown} from '../../modules';
 import {FileInfo} from '../../../types/types';
-import {getFileExtensions, postFileInfo} from '../../../utils/requests';
+import {getFileExtensions, postFileInfo} from '../../../apis/requests';
 
 
 /*

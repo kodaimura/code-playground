@@ -6,7 +6,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 
 import {Folder} from '../../../types/types';
-import {postFolder} from '../../../utils/requests';
+import {postFolder} from '../../../apis/requests';
 
 
 /*

@@ -5,9 +5,9 @@ import Menu from '@mui/material/Menu';
 import Divider from '@mui/material/Divider';
 
 import FileNameForm from './FileNameForm';
-import DeleteDialog from '../../parts/DeleteDialog';
+import {DeleteDialog} from '../../shared';
 import {FileInfo} from '../../../types/types';
-import {deleteFile, getFilesInfo} from '../../../utils/requests';
+import {deleteFile, getFilesInfo} from '../../../apis/requests';
 
 
 /*
