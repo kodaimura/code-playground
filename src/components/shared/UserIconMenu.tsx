@@ -83,7 +83,7 @@ export const UserIconMenu = (props: {
         	<Typography variant="body2" color="text.secondary">
         	</Typography>
         </MenuItem>
-        <MenuItem onClick={() => navigate("/passwordchange") }>
+        <MenuItem onClick={() => navigate("/password") }>
         	<Avatar /> Change Password
         </MenuItem>
         <Divider />
