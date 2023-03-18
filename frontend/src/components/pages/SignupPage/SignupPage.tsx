@@ -23,7 +23,7 @@ export const SignupPage = () => {
 		Click here to use as a guest →
 		<Button
 			size="large" 
-			onClick={() => navigate('/guest')}
+			onClick={() => navigate('/')}
 		>GUEST</Button>
 		</CenterAlign>
 		<SignupForm />

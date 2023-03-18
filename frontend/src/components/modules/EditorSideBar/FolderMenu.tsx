@@ -64,49 +64,52 @@ const FolderMenu = (props:{
 
 	return (
 		<>
-		<Menu
-            anchorEl={props.anchorEl}
-            open={open}
-            onClose={handleClose}
-        >
-        <MenuItem onClick={handleClick1}>New File</MenuItem>
-        <MenuItem onClick={handleClick2}>Rename</MenuItem>
-        <Divider />
-        <MenuItem onClick={handleClick3}>New Folder</MenuItem>
-        <Divider />
-        <MenuItem onClick={handleClick4}>Delete Folder</MenuItem>
-        </Menu>
-
-        {(menu === 1 && props.targetFolder)? 
-            <FileNameForm
-                parentFolderNo={props.targetFolder.folderNo}
-                setFilesInfo={props.setFilesInfo}
-            /> : ""
-        }
-
-		{(menu === 2 && props.targetFolder)?
-			<FolderNameForm
-				folder={props.targetFolder}
-                parentFolderNo={props.targetFolder.parentFolderNo}
-                setFolders={props.setFolders}
-            /> : ""
-		} 
-
-		{(menu === 3 && props.targetFolder)?
-			<FolderNameForm
-                parentFolderNo={props.targetFolder.folderNo}
-                setFolders={props.setFolders}
-            /> : ""
-		} 
-
-        {(menu === 4 && props.targetFolder)?
-            <DeleteDialog
-                head={props.targetFolder.folderName}
-                body={"削除してよろしいですか？"}
-                handler={handleDelete} 
-            /> : ""
-        } 
-		</>
+        {(props.anchorEl !== null) &&
+        <div>
+		  <Menu
+                anchorEl={props.anchorEl}
+                open={open}
+                onClose={handleClose}
+            >
+                <MenuItem onClick={handleClick1}>New File</MenuItem>
+                <MenuItem onClick={handleClick2}>Rename</MenuItem>
+                <Divider />
+                <MenuItem onClick={handleClick3}>New Folder</MenuItem>
+                <Divider />
+                <MenuItem onClick={handleClick4}>Delete Folder</MenuItem>
+            </Menu>
+    
+            {(menu === 1 && props.targetFolder)? 
+                <FileNameForm
+                    parentFolderNo={props.targetFolder.folderNo}
+                    setFilesInfo={props.setFilesInfo}
+                /> : ""
+            }
+    
+		  {(menu === 2 && props.targetFolder)?
+		  	<FolderNameForm
+		  		folder={props.targetFolder}
+                    parentFolderNo={props.targetFolder.parentFolderNo}
+                    setFolders={props.setFolders}
+                /> : ""
+		  } 
+    
+		  {(menu === 3 && props.targetFolder)?
+		  	<FolderNameForm
+                    parentFolderNo={props.targetFolder.folderNo}
+                    setFolders={props.setFolders}
+                /> : ""
+		  } 
+    
+            {(menu === 4 && props.targetFolder)?
+                <DeleteDialog
+                    head={props.targetFolder.folderName}
+                    body={"削除してよろしいですか？"}
+                    handler={handleDelete} 
+                /> : ""
+            } 
+		</div>}
+        </>
 	)
 }
 

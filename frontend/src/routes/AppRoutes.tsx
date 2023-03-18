@@ -28,8 +28,8 @@ const AppRoutes = () => {
     return (
         <BrowserRouter>
         <Routes>
-            <Route path="/" element={auth? <MyPage /> : <LoginPage />} />
-            <Route path="/guest" element={<GuestPage />} />
+            <Route path="/" element={auth? <MyPage /> : <GuestPage />} />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />}/>
             <Route path="/password" element={<PasswordPage />} />
         </Routes>

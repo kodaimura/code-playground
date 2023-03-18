@@ -46,38 +46,34 @@ const FolderOpen = (props:{
 
 	return (
 		<>
-		<div onContextMenu={(e)=>{
-			e.preventDefault();
-			setAnchorEl((anchorEl === e.currentTarget)? null : e.currentTarget);
-		}}>
-
 		<Button
 			size="small"
 			style={{
 				paddingLeft: props.hier * 15,
-				display: "block",
 				textTransform: 'none',
-				width:"100%",
-				textAlign:"left",
-				fontSize: "13px"}}
+				fontSize: "13px",
+				display: "block",
+				textAlign: "left",
+				width:"100%"}}
 			onClick={() => setOpen(open * -1)}
+			onContextMenu={(e)=>{
+				e.preventDefault();
+				setAnchorEl((anchorEl === e.currentTarget)? null : e.currentTarget);
+			}}
 		>
 		{(open === 1)?
-			<>
-			<ArrowDropDownIcon color="action" fontSize="small"/>
-			<FolderOpenIcon color="action" fontSize="small"/>
-			</> :
-			<>
-			<ArrowRightIcon color="action" fontSize="small"/>
-			<FolderIcon color="action" fontSize="small"/>
-			</>
+			<div style={{display: "inline-flex", alignItems: "center"}}>
+				<ArrowDropDownIcon color="action" fontSize="small"/>
+				<FolderOpenIcon color="action" fontSize="small"/>
+				<span style={{color:"#555"}}>&nbsp;{props.folder.folderName}</span>
+			</div> :
+			<div style={{display: "inline-flex", alignItems: "center"}}>
+				<ArrowRightIcon color="action" fontSize="small"/>
+				<FolderIcon color="action" fontSize="small"/>
+				<span style={{color:"#555"}}>&nbsp;{props.folder.folderName}</span>
+			</div>
 		}
-		<span style={{color:"#555", verticalAlign: "middle"}}>
-			{props.folder.folderName}
-		</span>
 		</Button>
-
-		</div>
 
 		{(open === 1)?
 			<>

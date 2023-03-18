@@ -54,32 +54,35 @@ const FileMenu = (props:{
 
 	return (
 		<>
-		<Menu
-            anchorEl={props.anchorEl}
-            open={open}
-            onClose={handleClose}
-        >
-        <MenuItem onClick={handleClick1}>Rename</MenuItem>
-        <Divider />
-        <MenuItem onClick={handleClick2}>Delete File</MenuItem>
-        </Menu>
-
-
-        {(menu === 1 && props.targetFile)? 
-            <FileNameForm
-                file={props.targetFile}
-                parentFolderNo={props.targetFile.parentFolderNo}
-                setFilesInfo={props.setFilesInfo}
-            /> : ""
-        }
-        {(menu === 2 && props.targetFile)? 
-            <DeleteDialog
-                head={`${props.targetFile.fileName}.${props.targetFile.fileEx}`}
-                body={"削除してよろしいですか？"}
-                handler={handleDelete} 
-            /> : ""
-        }
-		</>
+        {(props.anchorEl !== null) &&
+        <div>
+		  <Menu
+                anchorEl={props.anchorEl}
+                open={open}
+                onClose={handleClose}
+            >
+                <MenuItem onClick={handleClick1}>Rename</MenuItem>
+                <Divider />
+                <MenuItem onClick={handleClick2}>Delete File</MenuItem>
+            </Menu>
+            
+    
+            {(menu === 1 && props.targetFile)? 
+                <FileNameForm
+                    file={props.targetFile}
+                    parentFolderNo={props.targetFile.parentFolderNo}
+                    setFilesInfo={props.setFilesInfo}
+                /> : ""
+            }
+            {(menu === 2 && props.targetFile)? 
+                <DeleteDialog
+                    head={`${props.targetFile.fileName}.${props.targetFile.fileEx}`}
+                    body={"削除してよろしいですか？"}
+                    handler={handleDelete} 
+                /> : ""
+            }
+		</div>}
+        </>
 	)
 }
 

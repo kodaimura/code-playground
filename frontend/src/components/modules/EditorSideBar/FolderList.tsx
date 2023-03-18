@@ -23,6 +23,7 @@ const FolderList = (props:{
 		) => {
 			return (
 				<FolderOpen 
+					key={index}
 					folder={elem} 
 					hier={props.hier} 
 					setOpenFileNo={props.setOpenFileNo}

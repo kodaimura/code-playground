@@ -26,7 +26,7 @@ export const GuestPage = () => {
 					onClick={() => navigate('/signup')}
 				>SIGNUP</Button>
 				<Button
-					onClick={() => navigate('/')}
+					onClick={() => navigate('/login')}
 				>LOGIN</Button>
 				</>}
 		/>
