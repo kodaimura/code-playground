@@ -3,7 +3,7 @@
 export const python = 'Python';
 export const ruby = 'Ruby';
 export const java = 'Java';
-export const scheme = 'Scheme';
+export const racket = 'Racket';
 export const nodejs = 'Nodejs';
 export const typescript = 'Typescript';
 export const golang = 'Golang';
@@ -15,7 +15,7 @@ export const cpp = 'Cpp';
 export const pythonEx = 'py';
 export const rubyEx = 'rb';
 export const javaEx = 'java';
-export const schemeEx = 'rkt';
+export const racketEx = 'rkt';
 export const nodejsEx = 'js';
 export const typescriptEx = 'ts';
 export const golangEx = 'go'
@@ -28,7 +28,7 @@ export const LangAndVersions = {
     [python] :['3.10', '3.9', '3.8', '2.7'],
     [ruby] :['3.1', '3.0', '2.7'],
     [java] :['17', '12', '8'],
-    [scheme] : ['8.3', '7.9'],
+    [racket] : ['8.3', '7.9'],
     [nodejs] : ['8.3.0'],
     [typescript] : ['4.5'],
     [golang] : ['1.17'],
@@ -41,7 +41,7 @@ export const FileExtensions = {
 	[python] : pythonEx,
     [ruby] : rubyEx,
     [java] : javaEx,
-    [scheme] : schemeEx,
+    [racket] : racketEx,
     [nodejs] : nodejsEx,
     [typescript] : typescriptEx,
     [golang] : golangEx,

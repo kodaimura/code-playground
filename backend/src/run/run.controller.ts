@@ -11,7 +11,7 @@ import {
     python,
     ruby,
     java,
-    scheme,
+    racket,
     nodejs,
     typescript,
     golang,
@@ -49,12 +49,12 @@ export class RunController {
         return await this.runService.runJava(version, code);
     }
 
-    @Post(`${scheme}/:version`)
-    async runScheme(
+    @Post(`${racket}/:version`)
+    async runRacket(
         @Param('version') version, 
         @Body('code') code 
     ): Promise<string> {
-        return await this.runService.runScheme(version, code);
+        return await this.runService.runRacket(version, code);
     }
 
     @Post(`${nodejs}/:version`)

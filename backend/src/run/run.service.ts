@@ -6,7 +6,7 @@ import {
 	pythonEx,
 	rubyEx,
 	javaEx,
-	schemeEx,
+	racketEx,
 	nodejsEx,
 	typescriptEx,
 	golangEx,
@@ -149,12 +149,12 @@ export class RunService {
         return this.run(fileName, fileEx, code, image, compileCommand, execCommand);
     }
 
-    async runScheme(
+    async runRacket(
         version: string,
         code: string
     ): Promise<string> {
 		const fileName = await this.makeRandName();
-		const fileEx = schemeEx;
+		const fileEx = racketEx;
 		const image = `racket/racket:${version}`;
 		const execCommand = `racket ${fileName}/${fileName}.${fileEx}`;
         return this.run(fileName, fileEx, code, image, "", execCommand);

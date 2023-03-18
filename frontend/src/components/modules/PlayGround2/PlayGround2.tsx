@@ -79,7 +79,7 @@ export const PlayGround2 = (props:{
 		<IconButton 
 			color="primary"
 			disabled={descSaveDisabled}
-			 onClick={() => {
+			onClick={() => {
         		putDescription(props.fileNo, description);
         		setDescSaveDisabled(true);
         		setMemo(false);

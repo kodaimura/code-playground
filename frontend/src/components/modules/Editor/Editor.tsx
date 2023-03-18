@@ -18,9 +18,11 @@ import 'ace-builds/src-noconflict/mode-c_cpp';
 const langToAceMode = (lang: string): string => {
 	if (lang === "C" || lang === "Cpp") {
 		return "c_cpp";
-	}else if (lang === "Nodejs") {
+	} else if (lang === "Nodejs") {
 		return "javascript"
-	}else {
+	} else if (lang === "Racket") {
+		return "scheme"
+	} else {
 		return lang.toLowerCase()
 	}
 }
