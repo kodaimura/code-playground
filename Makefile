@@ -10,11 +10,11 @@ start:
 stop:
 	docker compose stop
 
-front:
-	docker exec -i -t frontend bash
+infront:
+	docker compose exec frontend bash
 
-back:
-	docker exec -i -t backend bash
+inback:
+	docker compose exec backend bash
 
 build:
 	docker compose build --no-cache
