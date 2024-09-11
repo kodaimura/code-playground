@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
-import { FileText } from 'react-bootstrap-icons'; // Bootstrap Iconsのインポート
-
 import { getFileExtensions } from '../../../apis/requests';
 
 const outputFile = (
@@ -9,9 +7,8 @@ const outputFile = (
   fileName: string,
   fileEx: string
 ) => {
-  let ary = text.split('');
-  let blob = new Blob([ary.join('')], { type: "text/plain" });
-  let link = document.createElement('a');
+  const blob = new Blob([text], { type: "text/plain" });
+  const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
   link.download = `${fileName}.${fileEx}`;
   link.click();
@@ -33,7 +30,7 @@ export const FileOutputButton = (props: {
   const onClickHandler = () => {
     outputFile(
       props.text,
-      props.fileName || "code-playground", // デフォルトファイル名
+      props.fileName || "code-playground",
       fileExs[props.lang] ? fileExs[props.lang] : "txt"
     );
   };
@@ -44,7 +41,7 @@ export const FileOutputButton = (props: {
       onClick={onClickHandler} 
       className="d-flex align-items-center"
     >
-      <FileText size={24} className="me-2" />
+      <i className="bi bi-file-earmark-text me-2" style={{ fontSize: '24px' }}></i>
       Download
     </Button>
   );
