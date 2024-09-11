@@ -6,7 +6,6 @@ import {styled} from '@mui/material/styles';
 
 import {Header} from '../../layouts';
 import {PlayGround} from '../../modules';
-import {LeftAlign} from '../../shared';
 
 
 export const ContentBox = styled('div') ({
@@ -19,21 +18,9 @@ export const GuestPage = () => {
 
 	return (
 		<>
-		<Header 
-			rightContent={
-				<>
-				<Button
-					onClick={() => navigate('/signup')}
-				>SIGNUP</Button>
-				<Button
-					onClick={() => navigate('/login')}
-				>LOGIN</Button>
-				</>}
-		/>
+		<Header/>
 		<ContentBox>
-		<LeftAlign>
 		※同一のroomID(任意)を設定したユーザとエディタの共有が可能
-		</LeftAlign>
 		<PlayGround />
 		</ContentBox>
 		</>

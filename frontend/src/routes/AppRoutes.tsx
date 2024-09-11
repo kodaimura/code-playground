@@ -6,11 +6,7 @@ import {
 } from 'react-router-dom';
 
 import {
-    LoginPage,
-    SignupPage,
-    MyPage,
     GuestPage,
-    PasswordPage
 } from '../components/pages'
 
 import {checkAuth} from '../apis/common-requests'
@@ -28,10 +24,7 @@ const AppRoutes = () => {
     return (
         <BrowserRouter>
         <Routes>
-            <Route path="/" element={auth? <MyPage /> : <GuestPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />}/>
-            <Route path="/password" element={<PasswordPage />} />
+            <Route path="/" element={<GuestPage />} />
         </Routes>
         </BrowserRouter>
     )
