@@ -1,10 +1,7 @@
-docker pull python:3.10;
-docker pull python:3.9;
-docker pull python:3.8;
+docker pull python:3.13;
 docker pull python:2.7;
 
-docker pull ruby:3.1;
-docker pull ruby:3.0;
+docker pull ruby:3.2;
 docker pull ruby:2.7;
 
 docker pull openjdk:17;
@@ -12,9 +9,8 @@ docker pull openjdk:12;
 docker pull openjdk:8;
 
 docker pull racket/racket:8.3;
-docker pull racket/racket:7.9;
 
-docker pull golang:1.17;
+docker pull golang:1.22;
 
 docker pull rust:1.58;
 

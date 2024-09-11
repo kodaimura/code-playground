@@ -1,71 +1,67 @@
 import { Injectable } from '@nestjs/common';
+import { exec as execCallback } from 'child_process';
+import { promisify } from 'util';
+import { promises as fsPromises } from 'fs';
+import { join } from 'path';
 
-import { exec } from 'child_process';
-
+const exec = promisify(execCallback);
 
 @Injectable()
 export class AppService {
-    getHello(): string {
-        return 'Hello World!';
-    }
-
     getFileExtension(lang: string): string {
         const fileExtensions = {
-            "python" : "py",
-            "ruby" : "rb" 
-        }
+            "python": "py",
+            "ruby": "rb",
+        };
 
-        return fileExtensions[lang]
+        return fileExtensions[lang];
     }
 
     getRunCommand(lang: string): string {
-        const runCommand = {
-            "python" : "python",
-            "ruby" : "ruby" 
-        }
+        const runCommands = {
+            "python": "python",
+            "ruby": "ruby",
+        };
 
-        return runCommand[lang]
+        return runCommands[lang];
     }
 
-    async run(
-        lang: string,
-        version: string,
-        code: string
-    ): Promise<string> {
-        return new Promise<string> (async (resolve) => {
-            const fName = await Math.random();
-            const fEx = this.getFileExtension(lang);
-            const runCommand = this.getRunCommand(lang);
+    async run(lang: string, version: string, code: string): Promise<string> {
+        const fName = String(Math.random());
+        const fEx = this.getFileExtension(lang);
+        const runCommand = this.getRunCommand(lang);
+        const dirPath = join(process.cwd(), fName);
 
-            await exec(`mkdir ${fName}; cd ${fName}; touch ${fName}.${fEx}; echo "${code}" > ${fName}.${fEx};`,
-                 async (err) => {
-                    if (err) {
-                        resolve(err.message);
-                        exec(`yes | rm -r ../${fName}`)
-                        exec(`yes | rm -r ${fName}`)
-                    }else {
-                        let timeOut = false
-                        setTimeout(()=>{
-                            timeOut = true;
-                            exec(`docker stop ${fName}`);
-                        }, 20000);
-                        await exec(`docker run --rm --name ${fName} -v "$PWD":/src -w /src 
-                                    ${lang}:${version} ${runCommand} ${fName}/${fName}.${fEx};`,
-                            (err, stdout) => {
-                                if (timeOut) {
-                                    resolve("Timed Out")
-                                }else if (err) {
-                                    resolve(err.message);
-                                }else {
-                                    resolve(stdout);
-                                }
-                                exec(`yes | rm -r ../${fName}`)
-                                exec(`yes | rm -r ${fName}`)
-                            }
-                        )                        
-                    }
-                }
-            )
-        })
+        try {
+            await fsPromises.mkdir(dirPath);
+            const filePath = join(dirPath, `${fName}.${fEx}`);
+            await fsPromises.writeFile(filePath, code);
+
+            let timeout: NodeJS.Timeout;
+            const containerRunPromise = new Promise<string>((resolve, reject) => {
+                timeout = setTimeout(() => {
+                    exec(`docker stop ${fName}`).catch(reject);
+                    resolve("Error: Timed Out");
+                }, 20000);
+
+                exec(`docker run --rm --name ${fName} -v "$PWD":/src -w /src ${lang}:${version} ${runCommand} ${filePath}`)
+                    .then(({ stdout, stderr }) => {
+                        clearTimeout(timeout);
+                        if (stderr) {
+                            resolve(stderr);
+                        } else {
+                            resolve(stdout);
+                        }
+                    })
+                    .catch(reject);
+            });
+
+            return await containerRunPromise;
+        } catch (err) {
+            return `Error: ${err.message}`;
+        } finally {
+            // Cleanup
+            await fsPromises.rm(dirPath, { recursive: true, force: true }).catch(console.error);
+        }
     }
 }

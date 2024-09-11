@@ -25,13 +25,13 @@ export const cppEx = 'cpp'
 
 //Languages
 export const LangAndVersions = {
-    [python] :['3.10', '3.9', '3.8', '2.7'],
-    [ruby] :['3.1', '3.0', '2.7'],
+    [python] :['3.13', '2.7'],
+    [ruby] :['3.2', '2.7'],
     [java] :['17', '12', '8'],
-    [racket] : ['8.3', '7.9'],
+    [racket] : ['8.3'],
     [nodejs] : ['8.3.0'],
     [typescript] : ['4.5'],
-    [golang] : ['1.17'],
+    [golang] : ['1.22'],
     [rust] : ['1.58'],
     [c] : ['latest'],
     [cpp] : ['latest'],
