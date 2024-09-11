@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {
     BrowserRouter,
     Route,
@@ -9,18 +9,8 @@ import {
     GuestPage,
 } from '../components/pages'
 
-import {checkAuth} from '../apis/common-requests'
-
 
 const AppRoutes = () => {
-    const [auth, setAuth] = useState(false);
-
-    useEffect(() => {
-        checkAuth()
-        .then(bool => setAuth(bool));
-    }, []);
-
-
     return (
         <BrowserRouter>
         <Routes>

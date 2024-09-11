@@ -1,37 +1,48 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
+import { Button } from 'react-bootstrap';
+import { getFileExtensions } from '../../../apis/requests';
 
-import IconButton from '@mui/material/IconButton';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+const outputFile = (
+  text: string,
+  fileName: string,
+  fileEx: string
+) => {
+  const blob = new Blob([text], { type: "text/plain" });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `${fileName}.${fileEx}`;
+  link.click();
+};
 
-import {runProgram} from '../../../apis/requests';
-
-
-export const RunButton = (props: {
-    code: string,
-    lang: string,
-    version: string,
-    setResult: (result: string) => void
+export const FileOutputButton = (props: {
+  text: string,
+  fileName?: string,
+  lang: string,
 }) => {
-    const [disabled, setDisabled] = useState(false);
+  const [fileExs, setFileExs] = useState<{ [key: string]: string }>({});
 
-    const onClickHandler = () => {
-        setDisabled(true)
-        props.setResult("");
-        runProgram(props.lang, props.version, props.code.replaceAll('"', '\\"'))
-        .then(data => {
-            if (data) props.setResult(data);
-            setDisabled(false)
-        })
-    }
-    
-    return (
-        <IconButton
-        color="error"
-        disabled={disabled}
-        onClick={onClickHandler}
-        >
-        <PlayArrowIcon fontSize="large"/>
-        </IconButton>
-    )
-    
-}
+  useEffect(() => {
+    getFileExtensions().then(data => {
+      setFileExs(data);
+    });
+  }, []);
+
+  const onClickHandler = () => {
+    outputFile(
+      props.text,
+      props.fileName || "code-playground",
+      fileExs[props.lang] ? fileExs[props.lang] : "txt"
+    );
+  };
+
+  return (
+    <Button 
+      variant="primary" 
+      onClick={onClickHandler} 
+      className="d-flex align-items-center"
+    >
+      <i className="bi bi-file-earmark-text me-2" style={{ fontSize: '24px' }}></i>
+      Download
+    </Button>
+  );
+};
