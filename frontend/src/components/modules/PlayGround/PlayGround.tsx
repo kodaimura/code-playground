@@ -4,7 +4,7 @@ import { io as socketIOClient, Socket } from "socket.io-client";
 
 import {
   Console,
-  LangAndVersionPulldown,
+  SelectLanguages,
   FileOutputButton,
   RunButton,
   Editor
@@ -109,7 +109,6 @@ export const PlayGround = () => {
   const [code, setCode] = useState("");
   const [result, setResult] = useState("");
   const [lang, setLang] = useState("");
-  const [version, setVersion] = useState("");
   const [codes, setCodes] = useState<{ [key: string]: string }>(defaultCodes);
   const [group, setGroup] = useState("");
 
@@ -137,11 +136,9 @@ export const PlayGround = () => {
     <>
       <Row>
         <Col xs={12} md={5} className="text-start">
-          <LangAndVersionPulldown
+          <SelectLanguages
             lang={lang}
-            version={version}
             setLang={setLang}
-            setVersion={setVersion}
           />
         </Col>
         <Col xs={9} md={5} className="text-start">
@@ -157,7 +154,6 @@ export const PlayGround = () => {
           <RunButton
             code={code}
             lang={lang}
-            version={version}
             setResult={setResult}
           />
         </Col>

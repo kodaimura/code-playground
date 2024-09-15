@@ -13,12 +13,11 @@ import "ace-builds/src-noconflict/mode-rust";
 import "ace-builds/src-noconflict/mode-golang";
 import 'ace-builds/src-noconflict/mode-csharp';
 import 'ace-builds/src-noconflict/mode-c_cpp';
+import 'ace-builds/src-noconflict/mode-julia';
 
 
 const langToAceMode = (lang: string): string => {
-	if (lang === "C" || lang === "Cpp") {
-		return "c_cpp";
-	} else if (lang === "Nodejs") {
+	if (lang === "node") {
 		return "javascript"
 	} else if (lang === "Racket") {
 		return "scheme"

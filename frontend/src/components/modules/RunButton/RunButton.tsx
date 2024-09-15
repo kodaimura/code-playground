@@ -5,7 +5,6 @@ import { runProgram } from '../../../apis/requests';
 export const RunButton = (props: {
   code: string,
   lang: string,
-  version: string,
   setResult: (result: string) => void
 }) => {
   const [disabled, setDisabled] = useState(false);
@@ -13,7 +12,7 @@ export const RunButton = (props: {
   const onClickHandler = () => {
     setDisabled(true);
     props.setResult("");
-    runProgram(props.lang, props.version, props.code.replaceAll('"', '\\"'))
+    runProgram(props.lang, props.code.replaceAll('"', '\\"'))
       .then(data => {
         if (data) props.setResult(data);
         setDisabled(false);

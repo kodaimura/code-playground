@@ -2,16 +2,15 @@ import {apiurl} from '../utils/constants';
 
 
 export const runProgram = async (
-	lang: string,
-	version: string,
+	language: string,
 	code: string
 ) => {
-	return fetch(`${apiurl}/run/${lang}/${version}`, {
+	return fetch(`${apiurl}/run`, {
 		method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({code})
+        body: JSON.stringify({language, code})
     })
     .then(response => {return response.text()})
     .catch(console.error);
