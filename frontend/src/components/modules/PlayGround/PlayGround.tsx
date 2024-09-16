@@ -3,7 +3,6 @@ import { Button, Form, Row, Col, InputGroup } from 'react-bootstrap';
 import { io as socketIOClient, Socket } from "socket.io-client";
 
 import {
-  Console,
   SelectLanguages,
   FileOutputButton,
   RunButton,
@@ -107,7 +106,6 @@ const GroupForm = (props: {
 
 export const PlayGround = () => {
   const [code, setCode] = useState("");
-  const [result, setResult] = useState("");
   const [lang, setLang] = useState("");
   const [codes, setCodes] = useState<{ [key: string]: string }>(defaultCodes);
   const [group, setGroup] = useState("");
@@ -154,7 +152,6 @@ export const PlayGround = () => {
           <RunButton
             code={code}
             lang={lang}
-            setResult={setResult}
           />
         </Col>
         <Col xs={1.5} md={1} className="text-end">
@@ -170,7 +167,6 @@ export const PlayGround = () => {
         onChange={onChangeHandler}
         code={code}
       />
-      <Console result={result} />
     </>
   );
 };

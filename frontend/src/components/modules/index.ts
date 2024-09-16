@@ -1,4 +1,4 @@
-export {Console} from './Console/Console';
+export {ConsoleWindow} from './ConsoleWindow/ConsoleWindow';
 export {Editor} from './Editor/Editor';
 export {FileOutputButton} from './FileOutputButton/FileOutputButton';
 export {SelectLanguages} from './SelectLanguages/SelectLanguages';

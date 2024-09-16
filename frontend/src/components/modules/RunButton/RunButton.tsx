@@ -1,23 +1,24 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { runProgram } from '../../../apis/requests';
+import { ConsoleWindow } from '../../modules';
 
 export const RunButton = (props: {
   code: string,
   lang: string,
-  setResult: (result: string) => void
 }) => {
   const [disabled, setDisabled] = useState(false);
 
   const onClickHandler = () => {
     setDisabled(true);
-    props.setResult("");
     runProgram(props.lang, props.code.replaceAll('"', '\\"'))
       .then(data => {
-        if (data) props.setResult(data);
+        if (data) {
+          ConsoleWindow(data);
+        }
         setDisabled(false);
       });
-  }
+  };
 
   return (
     <Button
@@ -29,4 +30,4 @@ export const RunButton = (props: {
       <i className="bi bi-play" />
     </Button>
   );
-}
+};
