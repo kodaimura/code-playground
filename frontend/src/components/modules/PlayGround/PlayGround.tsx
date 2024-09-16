@@ -1,208 +1,186 @@
-import React, {useState, useEffect} from 'react';
-
-import IconButton from '@mui/material/IconButton';
-import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
-import CancelIcon from '@mui/icons-material/Cancel';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
-
-import socketIOClient, {Socket} from "socket.io-client";
-
-import {
-	Console,
-	LangAndVersionPulldown,
-	FileOutputButton,
-	RunButton,
-	Editor
-} from '../../modules';
-import { LeftAlign, RightAlign } from '../../shared';
-
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Button, Form, Row, Col, InputGroup } from 'react-bootstrap';
+import { io as socketIOClient, Socket } from "socket.io-client";
+import { SelectLanguages, FileOutputButton, RunButton, Editor } from '../../modules';
 import { defaultCodes } from '../../../utils/constants';
-
-
-/*
-WebSocket通信付きのプログラム実行環境
-*/
 
 const loc = document.location;
 const ENDPOINT = `${loc.protocol}//${loc.host}`;
-let socket: Socket;
+let socket: Socket | undefined;
 
-const GroupForm = (props: {
-	lang: string,
-	codes: {[lang: string]: string},
-	setCode: (code: string) => void,
-	setCodes: (arg: {[lang: string]: string}) => void,
-	setGroup: (group: string) => void,
-}) => {
-	const [group0, setGroup0] = useState("");
-	const [group, setGroup] = useState("");
-	const [disabled, setDisabled] = useState(true);
-	const [keep, setKeep] = useState({lang:"", code:""});
-
-
-	useEffect(() => {
-		props.setCodes({...props.codes, [keep.lang]: keep.code});
-
-		if (keep.lang === props.lang) {
-			props.setCode(keep.code);
-		}
-	}, [keep])
-
-
-	const onChangeHandler = (
-		event: React.ChangeEvent<HTMLInputElement>
-	) => {
-		let value = event.target.value;
-		if (value === "" || value === group) {
-			setDisabled(true);
-		}else {
-			setDisabled(false);
-		}
-		setGroup0(value)
-	}
-
-	const connectSocket = (
-		event: React.MouseEvent<HTMLButtonElement>
-	) => {
-		if (socket) {
-			socket.disconnect();
-		}
-		setDisabled(true);
-		socket = socketIOClient(ENDPOINT);
-    	socket.on(group0, data => {
-    		if (socket.id !== data.clientId) {
-    			setKeep({lang : data.lang, code : data.code});
-    		}
-    	});
-    	setGroup(group0);
-    	props.setGroup(group0);
-   	}
-
-   	const disconnectSocket = () => {
-   		if (socket) {
-			socket.disconnect();
-		}
-		if (group0 !== "") {
-			setDisabled(false);
-		}
-		setGroup("");
-    	props.setGroup("");
-   	}
-
-	return (
-		<>
-		<TextField 
-			sx={{ m:1, minWidth: 160 }}
-			label="roomID"  
-			color="success" 
-			focused 
-			size="small"
-			onChange={onChangeHandler} />
-		<IconButton 
-			color="success"
-			onClick={connectSocket}
-			disabled={disabled}
-		>
-		<ConnectWithoutContactIcon fontSize="large"/>
-		</IconButton>
-		{(group === "")? "" :
-			<>
-			<span style={{"fontSize":11}}><em>{group}</em></span>
-			<IconButton 
-				color="warning"
-				onClick={disconnectSocket}
-			>
-			<CancelIcon fontSize="small"/>
-			<span style={{"fontSize":11, "color":"orange"}}>切断</span>
-			</IconButton>
-			</>
-		}
-      	</>
-	)
+interface ConnectFormProps {
+    lang: string;
+    group: string;
+    setCode: (code: string) => void;
+    setGroup: (group: string) => void;
 }
 
+const ConnectForm: React.FC<ConnectFormProps> = ({ lang, group, setCode, setGroup }) => {
+    const [disabled, setDisabled] = useState(true);
+    const [keep, setKeep] = useState({ lang: "", code: "" });
 
-export const PlayGround = () => {
-	const [code, setCode] = useState("");
-	const [result, setResult] = useState("");
-	const [lang, setLang] = useState("");
-	const [version, setVersion] = useState("");
-	const [codes, setCodes] = useState<{[key: string]:string}>(defaultCodes);
-	const [group, setGroup] = useState("");
-
-
-	useEffect(() => {
-		setCode(codes[lang]? codes[lang] : "");
-	}, [lang])
-
-	useEffect(() => {
-		setCodes({...codes, [lang]: code});
-	}, [code])
-
-	const onChangeHandler = (
-		code: string,
-		event: React.ChangeEvent<HTMLInputElement>
-	): void => {	
-		setCode(code);
-		if (group !== "") {
-			socket.emit("typing", {
-				group, lang, code
-			})
+    useEffect(() => {
+		if (keep.lang === lang) {
+			setCode(keep.code);
 		}
-	}
+	}, [keep, lang, setCode])
 
-	return (
-		<>
-		<Grid container>
-        <Grid item xs={12} md={5}>
-        	<LeftAlign>
-          	<LangAndVersionPulldown 
-          		lang={lang}
-          		version={version}
-          		setLang={setLang} 
-          		setVersion={setVersion}
-          	/>
-        	</LeftAlign>
-        </Grid>
-        <Grid item xs={9} md={5}>
-			<LeftAlign>
-			<GroupForm
-				lang={lang} 
-				codes={codes}
-				setCode={setCode}
-				setCodes={setCodes}
-				setGroup={setGroup}
-			/>
-			</LeftAlign> 
-		</Grid>
-        <Grid item xs={1.5} md={1}>
-        	<RightAlign>
-          	<RunButton 
-          		code={code} 
-          		lang={lang} 
-          		version={version}
-          		setResult={setResult} 
-          	/>
-        	</ RightAlign>
-        </Grid>
-        <Grid item xs={1.5} md={1}>
-        	<RightAlign>
-        	<FileOutputButton 
-        		text={code} 
-        		lang={lang} 
-        	/>
-        	</RightAlign>
-        </Grid>
-      	</Grid>
+    const onChangeHandler = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        let value = event.target.value;
+        if (value === "" || value === group) {
+            setDisabled(true);
+        } else {
+            setDisabled(false);
+        }
+        setGroup(value);
+    };
 
-      	<Editor 
-      		lang={lang} 
-      		onChange={onChangeHandler}
-      		code={code}
-      	/>
-      	<Console result={result} />
-      	</>
-	)
-	
-}
+    const connectSocket = () => {
+        if (socket) {
+            socket.disconnect();
+        }
+        setDisabled(true);
+        socket = socketIOClient(ENDPOINT);
+        socket.on(group, data => {
+            if (socket && socket.id !== data.clientId) {
+                setKeep({ lang: data.lang, code: data.code });
+            }
+        });
+    };
+
+    const disconnectSocket = () => {
+        if (socket) {
+            socket.disconnect();
+        }
+        if (group !== "") {
+            setDisabled(false);
+        }
+        setGroup("");
+    };
+
+    return (
+        <>
+            同一のルームIDを設定したユーザとエディタを共有
+            <InputGroup className="mb-3">
+                <Form.Control
+                    placeholder="ルームID"
+                    value={group}
+                    onChange={onChangeHandler}
+                />
+                <Button
+                    variant="success"
+                    onClick={connectSocket}
+                    disabled={disabled}
+                >
+                    <i className="bi bi-link-45deg"></i> 共有
+                </Button>
+                {group && disabled && (
+                    <Button
+                        variant="warning"
+                        onClick={disconnectSocket}
+                    >
+                        <i className="bi bi-x-circle"></i> 切断
+                    </Button>
+                )}
+            </InputGroup>
+        </>
+    );
+};
+
+export const PlayGround: React.FC = () => {
+    const [code, setCode] = useState<string>("");
+    const [lang, setLang] = useState<string>("");
+    const [group, setGroup] = useState<string>("");
+    const prevLangRef = useRef<string>("");
+
+    useEffect(() => {
+        if (!localStorage.getItem('codes')) {
+            localStorage.setItem('codes', JSON.stringify(defaultCodes));
+        }
+    }, []);
+
+    const storeCode = useCallback(() => {
+        const storedCodes = localStorage.getItem('codes');
+        if (storedCodes) {
+            let codes = JSON.parse(storedCodes);
+            codes[prevLangRef.current] = code;
+            localStorage.setItem('codes', JSON.stringify(codes));
+        } else {
+            localStorage.setItem('codes', JSON.stringify(defaultCodes));
+        }
+        prevLangRef.current = lang;
+    }, [code, lang]);
+
+    const setStoredCode = useCallback(() => {
+        const storedCodes = localStorage.getItem('codes');
+        if (storedCodes) {
+            const codes = JSON.parse(storedCodes);
+            setCode(codes[lang] || "");
+        }
+    }, [lang]);
+
+    const resetCodes = () => {
+        localStorage.removeItem('codes');
+        window.location.reload();
+    };
+
+    useEffect(() => {
+        storeCode();
+        setStoredCode();
+    }, [lang, storeCode, setStoredCode]);
+
+    useEffect(() => {
+        window.addEventListener("beforeunload", storeCode);
+        return () => {
+            window.removeEventListener("beforeunload", storeCode);
+        };
+    }, [storeCode]);
+
+    const onChangeHandler = useCallback((code: string) => {
+        setCode(code);
+        if (group) {
+            socket?.emit("typing", { group, lang, code });
+        }
+    }, [group, lang]);
+
+    return (
+        <>
+            <Row>
+                <Col xs={6} className="text-start">
+                    <ConnectForm
+                        lang={lang}
+                        group={group}
+                        setCode={setCode}
+                        setGroup={setGroup}
+                    />
+                </Col>
+            </Row>
+            <Row>
+                <Col xs={12} md={3} className="text-start">
+                    <SelectLanguages
+                        lang={lang}
+                        setLang={setLang}
+                    />
+                </Col>
+                <Col xs={12} md={9} className="text-end d-flex justify-content-end">
+                    <RunButton code={code} lang={lang} />
+                    <FileOutputButton text={code} lang={lang} />
+                    <Button
+                        variant="warning"
+                        onClick={resetCodes}
+                        className="d-flex align-items-center"
+                    >
+                        <i className="bi bi-arrow-clockwise me-2" />&nbsp;リセット
+                    </Button>
+                </Col>
+            </Row>
+            <Editor
+                lang={lang}
+                onChange={onChangeHandler}
+                code={code}
+            />
+        </>
+    );
+};

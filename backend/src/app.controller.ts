@@ -1,20 +1,17 @@
 import { 
-    Controller, 
-    Body,
+    Controller,
     Get, 
 } from '@nestjs/common';
-import { AppService } from './app.service';
 
-import {LangAndVersions, FileExtensions} from './constants';
+import { Languages, FileExtensions } from './constants';
 
 
 @Controller()
 export class AppController {
-    constructor(private readonly appService: AppService) {}
 
     @Get('langs')
-    getLangs(): {[lang: string]: string[]} {
-        return LangAndVersions;
+    getLangs(): string[] {
+        return Languages;
     }
 
     @Get('file-extensions')
