@@ -132,6 +132,11 @@ export const PlayGround = () => {
         }
     }
 
+    const resetCodes = () => {
+        localStorage.removeItem('codes');
+        window.location.reload();
+    };
+
     useEffect(() => {
         storeCode();
         setStoredCode();
@@ -169,13 +174,13 @@ export const PlayGround = () => {
                 </Col>
             </Row>
             <Row>
-                <Col xs={6} md={6} className="text-start">
+                <Col xs={12} md={3} className="text-start">
                     <SelectLanguages
                         lang={lang}
                         setLang={setLang}
                     />
                 </Col>
-                <Col xs={6} md={6} className="text-end d-flex justify-content-end">
+                <Col xs={12} md={9} className="text-end d-flex justify-content-end">
                     <RunButton
                         code={code}
                         lang={lang}
@@ -184,6 +189,13 @@ export const PlayGround = () => {
                         text={code}
                         lang={lang}
                     />
+                    <Button
+                        variant="warning"
+                        onClick={resetCodes}
+                        className="d-flex align-items-center"
+                    >
+                        <i className="bi bi-arrow-clockwise me-2"/>&nbsp;リセット
+                    </Button>
                 </Col>
             </Row>
 
