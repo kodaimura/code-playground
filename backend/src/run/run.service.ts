@@ -12,7 +12,7 @@ export class RunService {
             case 'python3':
                 command = `python3 -c "${code.replace(/"/g, '\\"')}"`;
                 break;
-            case 'go':
+            case 'golang':
                 command = `echo "${code.replace(/"/g, '\\"')}" | go run -`;
                 break;
             case 'rust':

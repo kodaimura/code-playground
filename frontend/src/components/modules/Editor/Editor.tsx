@@ -20,6 +20,8 @@ const langToAceMode = (lang: string): string => {
             return 'javascript';
         case 'racket':
             return 'scheme';
+        case 'python3':
+            return 'python';
         default:
             return lang.toLowerCase();
     }

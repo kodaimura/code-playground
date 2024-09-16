@@ -1,6 +1,6 @@
 export const Languages = [
     "python3",
-    "go",
+    "golang",
     "rust",
     "node",
     "php",
@@ -10,7 +10,7 @@ export const Languages = [
 
 export const FileExtensions = {
 	"python3" : "py",
-    "go" : "go",
+    "golang" : "go",
     "rust" : "rs",
     "node" : "js",
     "php" : "php",
