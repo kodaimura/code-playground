@@ -9,7 +9,6 @@ export const GuestPage: React.FC = () => {
         <>
             <Header />
             <Container className="mt-4">
-                <p>※同一のroomID(任意)を設定したユーザとエディタの共有が可能</p>
                 <PlayGround />
             </Container>
         </>

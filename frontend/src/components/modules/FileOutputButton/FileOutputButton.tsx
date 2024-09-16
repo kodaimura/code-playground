@@ -45,8 +45,7 @@ export const FileOutputButton = ({
             onClick={onClickHandler}
             className="d-flex align-items-center"
         >
-            <i className="bi bi-file-earmark-text me-2" style={{ fontSize: '24px' }}></i>
-            Download
+            <i className="bi bi-file-earmark-text me-2"/>&nbsp;ダウンロード
         </Button>
     );
 };

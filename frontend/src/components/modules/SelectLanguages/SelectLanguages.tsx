@@ -34,7 +34,6 @@ export const SelectLanguages: React.FC<SelectLanguagesProps> = ({ lang, setLang 
     return (
         <div className="d-flex">
             <Form.Group className="me-3">
-                <Form.Label>Language</Form.Label>
                 <Dropdown>
                     <Dropdown.Toggle variant="secondary" id="dropdown-basic">
                         {lang || "Select Language"}

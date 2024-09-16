@@ -15,7 +15,7 @@ const loc = document.location;
 const ENDPOINT = `${loc.protocol}//${loc.host}`;
 let socket: Socket;
 
-const GroupForm = (props: {
+const ConnectForm = (props: {
     lang: string,
     setCode: (code: string) => void,
     setGroup: (group: string) => void,
@@ -65,9 +65,10 @@ const GroupForm = (props: {
 
     return (
         <>
+            同一のルームIDを設定したユーザとエディタを共有
             <InputGroup className="mb-3">
                 <Form.Control
-                    placeholder="roomID"
+                    placeholder="ルームID"
                     value={group0}
                     onChange={onChangeHandler}
                 />
@@ -76,16 +77,15 @@ const GroupForm = (props: {
                     onClick={connectSocket}
                     disabled={disabled}
                 >
-                    <i className="bi bi-link-45deg"></i>
+                    <i className="bi bi-link-45deg"></i>共有
                 </Button>
                 {group !== "" && (
                     <>
-                        <span style={{ fontSize: 11 }}><em>{group}</em></span>
                         <Button
                             variant="warning"
                             onClick={disconnectSocket}
                         >
-                            <i className="bi bi-x-circle"></i> 切断
+                            <i className="bi bi-x-circle"></i>切断
                         </Button>
                     </>
                 )}
@@ -157,26 +157,26 @@ export const PlayGround = () => {
     return (
         <>
             <Row>
-                <Col xs={12} md={5} className="text-start">
-                    <SelectLanguages
-                        lang={lang}
-                        setLang={setLang}
-                    />
-                </Col>
-                <Col xs={9} md={5} className="text-start">
-                    <GroupForm
+                <Col xs={6} className="text-start">
+                    <ConnectForm
                         lang={lang}
                         setCode={setCode}
                         setGroup={setGroup}
                     />
                 </Col>
-                <Col xs={1.5} md={1} className="text-end">
+            </Row>
+            <Row>
+                <Col xs={6} md={6} className="text-start">
+                    <SelectLanguages
+                        lang={lang}
+                        setLang={setLang}
+                    />
+                </Col>
+                <Col xs={6} md={6} className="text-end d-flex justify-content-end">
                     <RunButton
                         code={code}
                         lang={lang}
                     />
-                </Col>
-                <Col xs={1.5} md={1} className="text-end">
                     <FileOutputButton
                         text={code}
                         lang={lang}

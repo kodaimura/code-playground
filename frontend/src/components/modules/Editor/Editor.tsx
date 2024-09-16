@@ -55,7 +55,7 @@ export const Editor: React.FC<EditorProps> = ({ lang, onChange, onInput, code })
                 if (onInput) onInput(event);
             }}
             width="100%"
-            height="600px"
+            height="650px"
             value={code}
         />
     );

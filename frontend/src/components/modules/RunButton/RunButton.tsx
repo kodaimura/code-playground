@@ -25,9 +25,9 @@ export const RunButton = (props: {
       variant="danger"
       disabled={disabled}
       onClick={onClickHandler}
-      style={{ fontSize: '24px' }} 
+      className="d-flex align-items-center"
     >
-      <i className="bi bi-play" />
+      <i className="bi bi-play"/>&nbsp;&nbsp;実行
     </Button>
   );
 };
