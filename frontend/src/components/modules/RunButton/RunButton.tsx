@@ -1,40 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Button } from 'react-bootstrap';
 import { runProgram } from '../../../apis/requests';
 import { ConsoleWindow } from '../../modules';
 
-export const RunButton = (props: {
-  code: string,
-  lang: string,
-}) => {
-  const [disabled, setDisabled] = useState(false);
 
-  const onClickHandler = () => {
-    setDisabled(true);
-    runProgram(props.lang, fixCode(props.code))
-      .then(data => {
-        if (data) {
-          ConsoleWindow(data);
-        }
-        setDisabled(false);
-      });
-  };
+interface RunButtonProps {
+    code: string;
+    lang: string;
+}
 
-  const fixCode = (code: string) => {
-    if (props.lang === "php") {
-        code = code.replace(/^\<\?php\s*|\<\?\s*php\s*/i, '');
+
+const fixCode = (code: string, lang: string): string => {
+    if (lang === "php") {
+        code = code.replace(/^<\?php\s*|<\?\s*php\s*/i, '');
     }
-    return code.replaceAll('"', '\\"')
-  };
+    return code.replaceAll('"', '\\"');
+};
 
-  return (
-    <Button
-      variant="danger"
-      disabled={disabled}
-      onClick={onClickHandler}
-      className="d-flex align-items-center"
-    >
-      <i className="bi bi-play"/>&nbsp;&nbsp;実行
-    </Button>
-  );
+
+export const RunButton: React.FC<RunButtonProps> = ({ code, lang }) => {
+    const [disabled, setDisabled] = useState(false);
+
+    const onClickHandler = useCallback(() => {
+        setDisabled(true);
+        const fixedCode = fixCode(code, lang);
+
+        runProgram(lang, fixedCode)
+            .then(data => {
+                if (data) {
+                    ConsoleWindow(data);
+                }
+                setDisabled(false);
+            })
+            .catch(() => setDisabled(false));
+    }, [code, lang]);
+
+    return (
+        <Button
+            variant="danger"
+            disabled={disabled}
+            onClick={onClickHandler}
+            className="d-flex align-items-center"
+        >
+            <i className="bi bi-play" />&nbsp;&nbsp;実行
+        </Button>
+    );
 };

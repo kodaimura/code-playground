@@ -2,23 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import { getFileExtensions } from '../../../apis/requests';
 
-const outputFile = (text: string, fileName: string, fileEx: string) => {
-    const blob = new Blob([text], { type: "text/plain" });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `${fileName}.${fileEx}`;
-    link.click();
+
+const useFileDownloader = (text: string, fileName: string, fileEx: string) => {
+    const downloadFile = () => {
+        const blob = new Blob([text], { type: "text/plain" });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `${fileName}.${fileEx}`;
+        link.click();
+    };
+    return downloadFile;
 };
 
-export const FileOutputButton = ({
-    text,
-    fileName = "code-playground",
-    lang
-}: {
-    text: string,
-    fileName?: string,
-    lang: string,
-}) => {
+
+const useFileExtensions = () => {
     const [fileExs, setFileExs] = useState<{ [key: string]: string }>({});
 
     useEffect(() => {
@@ -34,18 +31,33 @@ export const FileOutputButton = ({
         fetchFileExtensions();
     }, []);
 
-    const onClickHandler = () => {
-        const fileExtension = fileExs[lang] || "txt";
-        outputFile(text, fileName, fileExtension);
-    };
+    return fileExs;
+};
+
+
+interface FileOutputButtonProps {
+    text: string;
+    fileName?: string;
+    lang: string;
+}
+
+
+export const FileOutputButton: React.FC<FileOutputButtonProps> = ({
+    text,
+    fileName = "code-playground",
+    lang,
+}) => {
+    const fileExs = useFileExtensions();
+    const fileExtension = fileExs[lang] || "txt";
+    const downloadFile = useFileDownloader(text, fileName, fileExtension);
 
     return (
         <Button
             variant="primary"
-            onClick={onClickHandler}
+            onClick={downloadFile}
             className="d-flex align-items-center"
         >
-            <i className="bi bi-file-earmark-text me-2"/>&nbsp;ダウンロード
+            <i className="bi bi-file-earmark-text me-2" />&nbsp;ダウンロード
         </Button>
     );
 };

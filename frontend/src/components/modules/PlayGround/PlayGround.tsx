@@ -1,45 +1,40 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Button, Form, Row, Col, InputGroup } from 'react-bootstrap';
 import { io as socketIOClient, Socket } from "socket.io-client";
-
-import {
-    SelectLanguages,
-    FileOutputButton,
-    RunButton,
-    Editor
-} from '../../modules';
-
+import { SelectLanguages, FileOutputButton, RunButton, Editor } from '../../modules';
 import { defaultCodes } from '../../../utils/constants';
 
 const loc = document.location;
 const ENDPOINT = `${loc.protocol}//${loc.host}`;
-let socket: Socket;
+let socket: Socket | undefined;
 
-const ConnectForm = (props: {
-    lang: string,
-    group: string,
-    setCode: (code: string) => void,
-    setGroup: (group: string) => void,
-}) => {
+interface ConnectFormProps {
+    lang: string;
+    group: string;
+    setCode: (code: string) => void;
+    setGroup: (group: string) => void;
+}
+
+const ConnectForm: React.FC<ConnectFormProps> = ({ lang, group, setCode, setGroup }) => {
     const [disabled, setDisabled] = useState(true);
     const [keep, setKeep] = useState({ lang: "", code: "" });
 
     useEffect(() => {
-		if (keep.lang === props.lang) {
-			props.setCode(keep.code);
+		if (keep.lang === lang) {
+			setCode(keep.code);
 		}
-	}, [keep])
+	}, [keep, lang, setCode])
 
     const onChangeHandler = (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
         let value = event.target.value;
-        if (value === "" || value === props.group) {
+        if (value === "" || value === group) {
             setDisabled(true);
         } else {
             setDisabled(false);
         }
-        props.setGroup(value);
+        setGroup(value);
     };
 
     const connectSocket = () => {
@@ -48,8 +43,8 @@ const ConnectForm = (props: {
         }
         setDisabled(true);
         socket = socketIOClient(ENDPOINT);
-        socket.on(props.group, data => {
-            if (socket.id !== data.clientId) {
+        socket.on(group, data => {
+            if (socket && socket.id !== data.clientId) {
                 setKeep({ lang: data.lang, code: data.code });
             }
         });
@@ -59,10 +54,10 @@ const ConnectForm = (props: {
         if (socket) {
             socket.disconnect();
         }
-        if (props.group !== "") {
+        if (group !== "") {
             setDisabled(false);
         }
-        props.setGroup("");
+        setGroup("");
     };
 
     return (
@@ -71,7 +66,7 @@ const ConnectForm = (props: {
             <InputGroup className="mb-3">
                 <Form.Control
                     placeholder="ルームID"
-                    value={props.group}
+                    value={group}
                     onChange={onChangeHandler}
                 />
                 <Button
@@ -79,27 +74,25 @@ const ConnectForm = (props: {
                     onClick={connectSocket}
                     disabled={disabled}
                 >
-                    <i className="bi bi-link-45deg"></i>共有
+                    <i className="bi bi-link-45deg"></i> 共有
                 </Button>
-                {props.group !== "" && disabled && (
-                    <>
-                        <Button
-                            variant="warning"
-                            onClick={disconnectSocket}
-                        >
-                            <i className="bi bi-x-circle"></i>切断
-                        </Button>
-                    </>
+                {group && disabled && (
+                    <Button
+                        variant="warning"
+                        onClick={disconnectSocket}
+                    >
+                        <i className="bi bi-x-circle"></i> 切断
+                    </Button>
                 )}
             </InputGroup>
         </>
     );
 };
 
-export const PlayGround = () => {
-    const [code, setCode] = useState("");
-    const [lang, setLang] = useState("");
-    const [group, setGroup] = useState("");
+export const PlayGround: React.FC = () => {
+    const [code, setCode] = useState<string>("");
+    const [lang, setLang] = useState<string>("");
+    const [group, setGroup] = useState<string>("");
     const prevLangRef = useRef<string>("");
 
     useEffect(() => {
@@ -108,7 +101,7 @@ export const PlayGround = () => {
         }
     }, []);
 
-    const storeCode = () => {
+    const storeCode = useCallback(() => {
         const storedCodes = localStorage.getItem('codes');
         if (storedCodes) {
             let codes = JSON.parse(storedCodes);
@@ -118,19 +111,15 @@ export const PlayGround = () => {
             localStorage.setItem('codes', JSON.stringify(defaultCodes));
         }
         prevLangRef.current = lang;
-    }
+    }, [code, lang]);
 
-    const setStoredCode = () => {
+    const setStoredCode = useCallback(() => {
         const storedCodes = localStorage.getItem('codes');
         if (storedCodes) {
             const codes = JSON.parse(storedCodes);
-            if (lang in codes) {
-                setCode(codes[lang]);
-            } else {
-                setCode("");
-            }
+            setCode(codes[lang] || "");
         }
-    }
+    }, [lang]);
 
     const resetCodes = () => {
         localStorage.removeItem('codes');
@@ -140,26 +129,21 @@ export const PlayGround = () => {
     useEffect(() => {
         storeCode();
         setStoredCode();
-    }, [lang]);
+    }, [lang, storeCode, setStoredCode]);
 
     useEffect(() => {
         window.addEventListener("beforeunload", storeCode);
         return () => {
             window.removeEventListener("beforeunload", storeCode);
         };
-    }, [lang, code]);
+    }, [storeCode]);
 
-    const onChangeHandler = (
-        code: string,
-        event: React.ChangeEvent<HTMLInputElement>
-    ): void => {
+    const onChangeHandler = useCallback((code: string) => {
         setCode(code);
-        if (group !== "") {
-            socket.emit("typing", {
-                group, lang, code
-            });
+        if (group) {
+            socket?.emit("typing", { group, lang, code });
         }
-    };
+    }, [group, lang]);
 
     return (
         <>
@@ -181,24 +165,17 @@ export const PlayGround = () => {
                     />
                 </Col>
                 <Col xs={12} md={9} className="text-end d-flex justify-content-end">
-                    <RunButton
-                        code={code}
-                        lang={lang}
-                    />
-                    <FileOutputButton
-                        text={code}
-                        lang={lang}
-                    />
+                    <RunButton code={code} lang={lang} />
+                    <FileOutputButton text={code} lang={lang} />
                     <Button
                         variant="warning"
                         onClick={resetCodes}
                         className="d-flex align-items-center"
                     >
-                        <i className="bi bi-arrow-clockwise me-2"/>&nbsp;リセット
+                        <i className="bi bi-arrow-clockwise me-2" />&nbsp;リセット
                     </Button>
                 </Col>
             </Row>
-
             <Editor
                 lang={lang}
                 onChange={onChangeHandler}

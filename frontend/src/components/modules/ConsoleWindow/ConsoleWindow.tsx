@@ -1,5 +1,3 @@
-import React from 'react';
-
 export const ConsoleWindow = (result: string) => {
   const consoleWindow = window.open("", "ConsoleOutput", "width=650,height=330");
   if (consoleWindow) {
