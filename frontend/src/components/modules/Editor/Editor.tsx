@@ -10,9 +10,8 @@ import "ace-builds/src-noconflict/mode-lisp";
 import "ace-builds/src-noconflict/mode-ruby";
 import "ace-builds/src-noconflict/mode-rust";
 import "ace-builds/src-noconflict/mode-golang";
-import 'ace-builds/src-noconflict/mode-csharp';
-import 'ace-builds/src-noconflict/mode-c_cpp';
 import 'ace-builds/src-noconflict/mode-julia';
+import 'ace-builds/src-noconflict/mode-php';
 
 const langToAceMode = (lang: string): string => {
     switch (lang.toLowerCase()) {

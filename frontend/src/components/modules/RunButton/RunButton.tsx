@@ -11,13 +11,20 @@ export const RunButton = (props: {
 
   const onClickHandler = () => {
     setDisabled(true);
-    runProgram(props.lang, props.code.replaceAll('"', '\\"'))
+    runProgram(props.lang, fixCode(props.code))
       .then(data => {
         if (data) {
           ConsoleWindow(data);
         }
         setDisabled(false);
       });
+  };
+
+  const fixCode = (code: string) => {
+    if (props.lang === "php") {
+        code = code.replace(/^\<\?php\s*|\<\?\s*php\s*/i, '');
+    }
+    return code.replaceAll('"', '\\"')
   };
 
   return (
