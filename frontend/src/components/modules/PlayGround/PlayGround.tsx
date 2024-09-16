@@ -17,24 +17,29 @@ let socket: Socket;
 
 const ConnectForm = (props: {
     lang: string,
+    group: string,
     setCode: (code: string) => void,
     setGroup: (group: string) => void,
 }) => {
-    const [group0, setGroup0] = useState("");
-    const [group, setGroup] = useState("");
     const [disabled, setDisabled] = useState(true);
     const [keep, setKeep] = useState({ lang: "", code: "" });
+
+    useEffect(() => {
+		if (keep.lang === props.lang) {
+			props.setCode(keep.code);
+		}
+	}, [keep])
 
     const onChangeHandler = (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
         let value = event.target.value;
-        if (value === "" || value === group) {
+        if (value === "" || value === props.group) {
             setDisabled(true);
         } else {
             setDisabled(false);
         }
-        setGroup0(value);
+        props.setGroup(value);
     };
 
     const connectSocket = () => {
@@ -43,23 +48,20 @@ const ConnectForm = (props: {
         }
         setDisabled(true);
         socket = socketIOClient(ENDPOINT);
-        socket.on(group0, data => {
+        socket.on(props.group, data => {
             if (socket.id !== data.clientId) {
                 setKeep({ lang: data.lang, code: data.code });
             }
         });
-        setGroup(group0);
-        props.setGroup(group0);
     };
 
     const disconnectSocket = () => {
         if (socket) {
             socket.disconnect();
         }
-        if (group0 !== "") {
+        if (props.group !== "") {
             setDisabled(false);
         }
-        setGroup("");
         props.setGroup("");
     };
 
@@ -69,7 +71,7 @@ const ConnectForm = (props: {
             <InputGroup className="mb-3">
                 <Form.Control
                     placeholder="ルームID"
-                    value={group0}
+                    value={props.group}
                     onChange={onChangeHandler}
                 />
                 <Button
@@ -79,7 +81,7 @@ const ConnectForm = (props: {
                 >
                     <i className="bi bi-link-45deg"></i>共有
                 </Button>
-                {group !== "" && (
+                {props.group !== "" && disabled && (
                     <>
                         <Button
                             variant="warning"
@@ -160,6 +162,7 @@ export const PlayGround = () => {
                 <Col xs={6} className="text-start">
                     <ConnectForm
                         lang={lang}
+                        group={group}
                         setCode={setCode}
                         setGroup={setGroup}
                     />
