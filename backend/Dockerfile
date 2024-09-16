@@ -33,4 +33,4 @@ COPY . .
 RUN npm install
 
 # コンテナが起動したときに実行されるコマンド
-CMD ["npm", "run", "start:dev"]
+# CMD ["npm", "run", "start:dev"]
