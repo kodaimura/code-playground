@@ -10,6 +10,7 @@ services:
       - ./backend:/usr/src/app
     working_dir: /usr/src/app
     tty: true
+    #command: ["npm", "run", "start"]
 
   frontend:
     build:
@@ -20,3 +21,4 @@ services:
       - ./frontend:/usr/src/app
     working_dir: /usr/src/app
     tty: true
+    #command: ["npm", "run", "build"]
