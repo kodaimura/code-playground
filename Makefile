@@ -26,3 +26,9 @@ infront:
 
 inback:
 	$(DOCKER_COMPOSE_DEV) exec backend bash || $(DOCKER_COMPOSE_PROD) exec backend bash
+
+logfront:
+	docker compose logs -f frontend
+
+logback:
+	docker compose logs -f backend
