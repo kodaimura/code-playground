@@ -40,4 +40,4 @@ prod-inback:
 	docker compose -f docker-compose.prod.yml exec backend bash
 
 prod-build:
-	docker compose -f docker-compose.dev.yml build --no-cache
+	docker compose -f docker-compose.prod.yml build --no-cache
