@@ -14,10 +14,12 @@ prod-build:
 	$(DOCKER_COMPOSE_PROD) build --no-cache
 
 down:
-	$(DOCKER_COMPOSE_DEV) down || $(DOCKER_COMPOSE_PROD) down
+	$(DOCKER_COMPOSE_DEV) down
+	$(DOCKER_COMPOSE_PROD) down
 
 stop:
-	$(DOCKER_COMPOSE_DEV) stop || $(DOCKER_COMPOSE_PROD) stop
+	$(DOCKER_COMPOSE_DEV) stop
+	$(DOCKER_COMPOSE_PROD) stop
 
 infront:
 	$(DOCKER_COMPOSE_DEV) exec frontend bash || $(DOCKER_COMPOSE_PROD) exec frontend bash
