@@ -22,15 +22,3 @@ RUN curl -fsSL https://julialang-s3.julialang.org/bin/linux/x64/1.9/julia-1.9.3-
 
 # TypeScript のインストール
 RUN npm install -g typescript
-
-# NestJS の依存関係をインストールするために作業ディレクトリを設定
-WORKDIR /usr/src/app
-
-# NestJS アプリケーションのコードをコンテナ内にコピー
-COPY . .
-
-# npm を使って依存関係をインストール
-RUN npm install
-
-# コンテナが起動したときに実行されるコマンド
-# CMD ["npm", "run", "start:dev"]
