@@ -1,43 +1,26 @@
-#開発環境
-up:
-	docker compose up -d
+DOCKER_COMPOSE_DEV = docker compose
+DOCKER_COMPOSE_PROD = docker compose -f docker-compose.prod.yml
 
-down:
-	docker compose down
+dev:
+	$(DOCKER_COMPOSE_DEV) up -d
 
-start:
-	docker compose start
+prod:
+	$(DOCKER_COMPOSE_PROD) up -d
 
-stop:
-	docker compose stop
-
-infront:
-	docker compose exec frontend bash
-
-inback:
-	docker compose exec backend bash
-
-build:
-	docker compose build --no-cache
-
-#本番環境
-prod-up:
-	docker compose -f docker-compose.prod.yml up -d
-
-prod-down:
-	docker compose -f docker-compose.prod.yml down
-
-prod-start:
-	docker compose -f docker-compose.prod.yml start
-
-prod-stop:
-	docker compose -f docker-compose.prod.yml stop
-
-prod-infront:
-	docker compose -f docker-compose.prod.yml exec frontend bash
-
-prod-inback:
-	docker compose -f docker-compose.prod.yml exec backend bash
+dev-build:
+	$(DOCKER_COMPOSE_DEV) build --no-cache
 
 prod-build:
-	docker compose -f docker-compose.prod.yml build --no-cache
+	$(DOCKER_COMPOSE_PROD) build --no-cache
+
+down:
+	$(DOCKER_COMPOSE_DEV) down || $(DOCKER_COMPOSE_PROD) down
+
+stop:
+	$(DOCKER_COMPOSE_DEV) stop || $(DOCKER_COMPOSE_PROD) stop
+
+infront:
+	$(DOCKER_COMPOSE_DEV) exec frontend bash || $(DOCKER_COMPOSE_PROD) exec frontend bash
+
+inback:
+	$(DOCKER_COMPOSE_DEV) exec backend bash || $(DOCKER_COMPOSE_PROD) exec backend bash
